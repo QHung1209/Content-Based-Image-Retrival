@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title> Image Search </title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.min.css'>
+</head>
+
+<body>
+  <main class="page">
+    <h2>Image Search</h2>
+    <!-- input file -->
+    <form id="uploadForm" action="/upload_file" method="POST" enctype="multipart/form-data">
+
+      <input type="file" name="file" accept=".jpg" id="file-input" />
+      <input type="hidden" name="image_url" id="image_url" value="" />
+
+      <button class="btn upload hide" id="searchBtn">Search</button>
+
+    </form>
+
+
+    <!-- leftbox -->
+    <div class="box-2">
+      <div class="result"></div>
+    </div>
+    <!--rightbox-->
+    <div class="box-2 img-result hide">
+      <!-- result of crop -->
+      <img class="cropped" src="" alt="">
+    </div>
+    <!-- input file -->
+    <div class="box">
+      <div class="options hide">
+        <label> Width</label>
+        <input type="number" class="img-w" />
+      </div>
+      <!-- search btn -->
+      <button class="btn search hide">Search</button>
+      <!-- download btn -->
+    </div>
+
+  </main>
+
+</body>
+<style>
+  .page {
+    margin: 1em auto;
+    max-width: 768px;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    height: 100%;
+    float: left;
+    text-align: left;
+  }
+
+  .box {
+    padding: 0.5em;
+    width: calc(100%/2 - 1em);
+    margin: 0.5em;
+
+  }
+
+  .box-2 {
+    padding: 0.5em;
+    width: calc(100%/2 - 1em);
+
+  }
+
+  .options label,
+  .options input {
+    width: 4em;
+    padding: 0.5em 1em;
+  }
+
+  .btn {
+    background: white;
+    color: black;
+    border: 1px solid black;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    margin: 0.8em 0.3em;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .hide {
+    display: none;
+  }
+
+  img {
+    max-width: 100%;
+  }
+</style>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js'></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+  /*
+    function uploadFile() {
+      var form = document.getElementById('uploadForm');
+      var fileInput = document.getElementById('file-input');
+      var imageUrlInput = document.getElementById('image_url');
+      form.submit();
+    }
+  */
+  // vars
+  let result = document.querySelector('.result'),
+    img_result = document.querySelector('.img-result'),
+    img_w = document.querySelector('.img-w'),
+    img_h = document.querySelector('.img-h'),
+    search = document.querySelector('.upload'),
+    cropped = document.querySelector('.cropped'),
+    upload = document.querySelector('#file-input'),
+    cropper = '';
+
+    document.getElementById('searchBtn').addEventListener('click', function (e) {
+    e.preventDefault(); // Ngăn chặn hành vi mặc định của form submission
+
+    // Tiến hành gửi dữ liệu form bằng AJAX
+    sendFormData();
+});
+
+function sendFormData() {
+    // Lấy dữ liệu form
+    var formData = new FormData(document.getElementById('uploadForm'));
+
+    // Gửi dữ liệu form bằng AJAX
+    $.ajax({
+        type: 'POST',
+        url: '/upload_file', // Đổi đường dẫn tùy thuộc vào cấu hình của bạn
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            // Xử lý kết quả thành công (nếu cần)
+            console.log(response);
+        },
+        error: function (error) {
+            // Xử lý lỗi (nếu cần)
+            console.error(error);
+        }
+    });
+}
+
+  // on change show image with crop options
+  upload.addEventListener('change', e => {
+    e.preventDefault();
+    if (e.target.files.length) {
+      // start file reader
+      const reader = new FileReader();
+      reader.onload = e => {
+        if (e.target.result) {
+          // create new image
+          let img = document.createElement('img');
+          img.id = 'image';
+          img.src = e.target.result;
+          // clean result before
+          result.innerHTML = '';
+          // append new image
+          result.appendChild(img);
+          // show search btn and options
+          search.classList.remove('hide');
+          // init cropper
+          cropper = new Cropper(img);
+          var fileName = e.target.files[0].name;
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+
+    let imgSrc = cropper.getCroppedCanvas({
+      width: img_w.value // input value
+    }).toDataURL();
+    // remove hide class of img
+    cropped.classList.remove('hide');
+    img_result.classList.remove('hide');
+    // show image cropped
+    cropped.src = imgSrc;
+
+    /*
+        let cropperData = cropper.getData();
+        let x = cropperData.x;
+        let y = cropperData.y;
+        let width = cropperData.width;
+        let height = cropperData.height;
+        let fileInput = document.getElementById('file-input');
+        let fileName = fileInput.files[0].name;
+    
+        $.ajax({
+          type: "POST",
+          url: "/upload_file",
+          contentType: "application/json;charset=UTF-8",
+          data: JSON.stringify({ x: x, y: y, width: width, height: height, fileName: fileName }),
+          success: function (response) {
+            console.log(response);
+          }
+    
+    
+        });*/
+  });
+
+  // search on click
+  search.addEventListener('click', e => {
+    e.preventDefault();
+    // get result to data uri
+    let imgSrc = cropper.getCroppedCanvas({
+      width: img_w.value // input value
+    }).toDataURL();
+    // remove hide class of img
+    cropped.classList.remove('hide');
+    img_result.classList.remove('hide');
+    // show image cropped
+    cropped.src = imgSrc;
+
+    let cropperData = cropper.getData();
+    let x = cropperData.x;
+    let y = cropperData.y;
+    let width = cropperData.width;
+    let height = cropperData.height;
+    let fileInput = document.getElementById('file-input');
+    let fileName = fileInput.files[0].name;
+
+    $.ajax({
+      type: "POST",
+      url: "/get_Data",
+      contentType: "application/json;charset=UTF-8",
+      data: JSON.stringify({ x: x, y: y, width: width, height: height, fileName: fileName }),
+      success: function (response) {
+        console.log(response);
+      }
+
+    });
+
+
+
+  });
+
+</script>
+
+</html>
