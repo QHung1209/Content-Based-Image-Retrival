@@ -98,15 +98,7 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js'></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-  /*
-    function uploadFile() {
-      var form = document.getElementById('uploadForm');
-      var fileInput = document.getElementById('file-input');
-      var imageUrlInput = document.getElementById('image_url');
-      form.submit();
-    }
-  */
-  // vars
+ 
   let result = document.querySelector('.result'),
     img_result = document.querySelector('.img-result'),
     img_w = document.querySelector('.img-w'),
@@ -180,26 +172,7 @@ function sendFormData() {
     // show image cropped
     cropped.src = imgSrc;
 
-    /*
-        let cropperData = cropper.getData();
-        let x = cropperData.x;
-        let y = cropperData.y;
-        let width = cropperData.width;
-        let height = cropperData.height;
-        let fileInput = document.getElementById('file-input');
-        let fileName = fileInput.files[0].name;
-    
-        $.ajax({
-          type: "POST",
-          url: "/upload_file",
-          contentType: "application/json;charset=UTF-8",
-          data: JSON.stringify({ x: x, y: y, width: width, height: height, fileName: fileName }),
-          success: function (response) {
-            console.log(response);
-          }
-    
-    
-        });*/
+ 
   });
 
   // search on click
