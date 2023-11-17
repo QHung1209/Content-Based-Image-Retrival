@@ -1,1 +1,0 @@
-# Content-Based-Image-Retrival
