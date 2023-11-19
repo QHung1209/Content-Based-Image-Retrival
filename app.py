@@ -59,7 +59,7 @@ def get_Data():
 
     img = cv2.imread(image_path)
 
-    # Crop image to specified area using slicing
+    # Crop image 
     crop_img = img[int(y):int(y+height), int(x):int(x+width)]
 # Show image
     cv2.imshow("cropped", crop_img)
