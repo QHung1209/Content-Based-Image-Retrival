@@ -58,33 +58,51 @@
   </style>
 
 </head>
-
+dataset2\f7 a1 36 f7a136f261c6a038c959ae6f6d39057.png
 <body>
   <main class="page">
-    <h2>Image Search</h2>
-    <!-- input file -->
-    <form id="uploadForm" action="/upload_file" method="POST" enctype="multipart/form-data">
+    <table>
+      <tr>
+        <td>
+          <h1 style="margin-left: 50px; margin-top:-5px;">Image Search</h1>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <!-- input file -->
+          <form id="uploadForm" action="/upload_file" method="POST" enctype="multipart/form-data">
 
-      <input type="file" name="file" accept=".jpg" id="file-input" />
-      <input type="hidden" name="image_url" id="image_url" value="" />
+            <input type="file" name="file" accept="image/*" id="file-input" style="margin-left: 50px;" />
+            <input type="hidden" name="image_url" id="image_url" value="" />
+            <button class="btn upload hide" id="searchBtn" style="margin-left: 50px;">Search</button>
 
-      <button class="btn upload hide" id="searchBtn">Search</button>
-
-    </form>
-
-
-    <!-- leftbox -->
-    <div class="box-2">
-      <div class="result"></div>
-    </div>
-    <!--rightbox-->
-    <div class="box-2 img-result hide">
-      <!-- result of crop -->
-      <img class="cropped" src="" alt="">
-    </div>
-    <!-- input file -->
+          </form>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <!-- leftbox -->
+          <div class="box-2" style="margin-left: 20px;">
+            <div class="result"></div>
+          </div>
+          <!--rightbox-->
+          <div class="box-2 img-result hide">
+            <!-- result of crop -->
+            <img class="cropped" src="" alt="">
+          </div>
+          <!-- input file -->
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="result-images"></div>
+        </td>
+      </tr>
+    </table>
 
   </main>
+  <!-- Add this div to display search results -->
+  
 
 </body>
 
@@ -161,23 +179,19 @@
     cropped.classList.remove('hide');
     img_result.classList.remove('hide');
     // show image cropped
-    cropped.src = imgSrc;
+    //cropped.src = imgSrc;
 
 
   });
 
-  // search on click
+
   search.addEventListener('click', e => {
     e.preventDefault();
-    // get result to data uri
+
     let imgSrc = cropper.getCroppedCanvas({
-      // width: 300 // input value
+
     }).toDataURL();
-    // remove hide class of img
-    cropped.classList.remove('hide');
-    img_result.classList.remove('hide');
-    // show image cropped
-    //cropped.src = imgSrc;
+
 
     let cropperData = cropper.getData();
     let x = cropperData.x;
@@ -194,11 +208,20 @@
       data: JSON.stringify({ x: x, y: y, width: width, height: height, fileName: fileName }),
       success: function (response) {
         console.log(response);
-      }
 
+        // Clear previous results
+        $('.result-images').empty();
+
+        // Display new results
+        for (let i = 0; i < response.results.length; i++) {
+          $('.result-images').append('<img src="' + response.results[i] + '" alt="Result Image">');
+        }
+      }
     });
 
   });
+
+  
 
 </script>
 
