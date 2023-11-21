@@ -74,7 +74,7 @@ def get_Data():
 
     distance = [np.linalg.norm(vector - search_vector) for vector in vectors]
 
-    ids = np.argsort(distance)[:5]
+    ids = np.argsort(distance)[:50]
 
     url = [paths[id] for id in ids]
 
