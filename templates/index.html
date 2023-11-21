@@ -58,7 +58,7 @@
   </style>
 
 </head>
-dataset2\f7 a1 36 f7a136f261c6a038c959ae6f6d39057.png
+
 <body>
   <main class="page">
     <table>
@@ -74,7 +74,8 @@ dataset2\f7 a1 36 f7a136f261c6a038c959ae6f6d39057.png
 
             <input type="file" name="file" accept="image/*" id="file-input" style="margin-left: 50px;" />
             <input type="hidden" name="image_url" id="image_url" value="" />
-            <button class="btn upload hide" id="searchBtn" style="margin-left: 50px;">Search</button>
+            <button type="button" class="btn upload hide" id="searchBtn" style="margin-left: 50px;">Search</button>
+
 
           </form>
         </td>
@@ -95,14 +96,21 @@ dataset2\f7 a1 36 f7a136f261c6a038c959ae6f6d39057.png
       </tr>
       <tr>
         <td>
-          <div class="result-images"></div>
+          {% if image_urls %}
+          <h2>Top 5 Similar Images:</h2>
+          <div>
+            {% for url in image_urls %}
+            <img src="{{ url }}" alt="Similar Image">
+            {% endfor %}
+          </div>
+          {% endif %}
         </td>
       </tr>
     </table>
 
   </main>
-  <!-- Add this div to display search results -->
-  
+
+
 
 </body>
 
@@ -201,6 +209,7 @@ dataset2\f7 a1 36 f7a136f261c6a038c959ae6f6d39057.png
     let fileInput = document.getElementById('file-input');
     let fileName = fileInput.files[0].name;
 
+
     $.ajax({
       type: "POST",
       url: "/get_Data",
@@ -208,20 +217,12 @@ dataset2\f7 a1 36 f7a136f261c6a038c959ae6f6d39057.png
       data: JSON.stringify({ x: x, y: y, width: width, height: height, fileName: fileName }),
       success: function (response) {
         console.log(response);
-
-        // Clear previous results
-        $('.result-images').empty();
-
-        // Display new results
-        for (let i = 0; i < response.results.length; i++) {
-          $('.result-images').append('<img src="' + response.results[i] + '" alt="Result Image">');
-        }
+        $('.page').html(response); 
       }
+      
     });
 
   });
-
-  
 
 </script>
 

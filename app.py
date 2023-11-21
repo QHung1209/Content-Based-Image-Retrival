@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session,jsonify
+from flask import Flask, render_template, request, session,url_for
 from keras.preprocessing import image
 from keras.applications.vgg16 import VGG16, preprocess_input
 from keras.models import Model
@@ -8,7 +8,9 @@ from cv2 import resize,cvtColor,COLOR_BGR2RGB,imread
  
 app = Flask(__name__)
 app.secret_key = "your_secret_key" 
-
+app.config['OUTPUT_FOLDER'] = 'dataset2/' 
+app.config['UPLOAD_DIRECTORY'] = 'input_dir/'
+app.config['ALLOWED_EXTENSIONS'] = ['.png']
 
 vectors = pickle.load(open(".\\vectors.pkl", "rb"))
 
@@ -37,10 +39,6 @@ def extract_vector(model, img):
     vector = model.predict(img_tensor)[0]
     vector = vector / np.linalg.norm(vector)
     return vector
-
-@app.route("/")
-def home():
-    return render_template("index.html")
 
 
 @app.route('/upload_file', methods=['POST'])
@@ -78,10 +76,15 @@ def get_Data():
 
     ids = np.argsort(distance)[:5]
 
-    scores = [paths[id] for id in ids]
+    url = [paths[id] for id in ids]
 
-    return jsonify(results=scores)
+    image_urls = [url_for('static', filename=url) for url in url]
 
+    return render_template("index.html", image_urls=image_urls)
+
+@app.route("/")
+def home():
+    return render_template("index.html")
     
 if __name__ == '__main__':
     app.run(debug=True)
