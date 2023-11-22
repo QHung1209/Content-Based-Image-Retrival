@@ -74,13 +74,12 @@ def get_Data():
 
     distance = [np.linalg.norm(vector - search_vector) for vector in vectors]
 
-    ids = np.argsort(distance)[:50]
+    ids = np.argsort(distance)[:5]
 
     url = [paths[id] for id in ids]
 
-    image_urls = [url_for('static', filename=url) for url in url]
 
-    return render_template("index.html", image_urls=image_urls)
+    return render_template("index.html", image_urls=url)
 
 @app.route("/")
 def home():
