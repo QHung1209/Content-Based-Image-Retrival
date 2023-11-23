@@ -12,9 +12,9 @@ app.config['OUTPUT_FOLDER'] = 'dataset2/'
 app.config['UPLOAD_DIRECTORY'] = 'input_dir/'
 app.config['ALLOWED_EXTENSIONS'] = ['.png']
 
-vectors = pickle.load(open(".\\vectors.pkl", "rb"))
+vectors = pickle.load(open("./vectors.pkl", "rb"))
 
-paths = pickle.load(open(".\\paths.pkl", "rb"))
+paths = pickle.load(open("./paths.pkl", "rb"))
 
 def get_extract_feature():
     vgg16_model = VGG16(weights='imagenet')
@@ -87,3 +87,5 @@ def home():
     
 if __name__ == '__main__':
     app.run(debug=True)
+    
+#test github
