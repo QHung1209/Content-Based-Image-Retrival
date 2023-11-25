@@ -8,9 +8,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.min.css'>
   <style>
+
+    .form-section {
+      height: 100vh;
+      display: flex;
+    }
+
     .page {
       margin: 1em auto;
-      max-width: 768px;
+      width: 35%;
       display: flex;
       align-items: flex-start;
       flex-wrap: wrap;
@@ -56,64 +62,82 @@
     img {
       max-width: 100%;
     }
+
+    .display {
+      display: block;
+      width: 70%;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    .display img {
+      width: 300px;
+      height: auto;
+      margin: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .display img:hover {
+      border: 1px solid #777;
+    }
   </style>
 
 </head>
 
 <body>
-  <main class="page">
-    <table>
-      <tr>
-        <td>
-          <h1 style="margin-left: 50px; margin-top:-5px;">Image Search</h1>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <!-- input file -->
-          <form id="uploadForm" action="/upload_file" method="POST" enctype="multipart/form-data">
+  <div class="form-section">
+    <div class="page">
+      <table>
+        <tr>
+          <td>
+            <h1 style="margin-left: 50px; margin-top:-5px;">Image Search</h1>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <!-- input file -->
+            <form id="uploadForm" action="/upload_file" method="POST" enctype="multipart/form-data">
+  
+              <input type="file" name="file" accept="image/*" id="file-input" style="margin-left: 50px;" />
+              <input type="hidden" name="image_url" id="image_url" value="" />
+              <button type="button" class="btn upload hide" id="searchBtn" style="margin-left: 50px;">Search</button>
+  
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <!-- leftbox -->
+            <div class="box-2" style="margin-left: 20px;">
+              <div class="result"></div>
+            </div>
+            <!--rightbox-->
+            <div class="box-2 img-result hide">
+              <!-- result of crop -->
+              <img class="cropped" src="" alt="">
+            </div>
+            <!-- input file -->
+          </td>
+      </table>
+    </div>
+      <div class="display image">
+        {% if image_urls %}
+        <h1>Result</h1>
+        {% for image in image_urls %}
+        <img src="{{ url_for('static', filename=image) }}" alt="{{ image }}">
+        {% endfor %}
+        {% endif %}
+      </div>
 
-            <input type="file" name="file" accept="image/*" id="file-input" style="margin-left: 50px;" />
-            <input type="hidden" name="image_url" id="image_url" value="" />
-            <button type="button" class="btn upload hide" id="searchBtn" style="margin-left: 50px;">Search</button>
-
-
-          </form>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <!-- leftbox -->
-          <div class="box-2" style="margin-left: 20px;">
-            <div class="result"></div>
-          </div>
-          <!--rightbox-->
-          <div class="box-2 img-result hide">
-            <!-- result of crop -->
-            <img class="cropped" src="" alt="">
-          </div>
-          <!-- input file -->
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <div class="display image">
-            <h1>Multiple Images</h1>
-            <!-- Sử dụng vòng lặp để hiển thị các hình ảnh -->
-            {% for image in image_urls %}
-            <img src="{{ url_for('static', filename=image) }}" alt="{{ image }}" width="300">
-            {% endfor %}
-          </div>
-        </td>
-      </tr>
-    </table>
-
-  </main>
-  <!-- Add this div to display search results -->
+  </div>
+ 
+ 
 
 
 </body>
-
 <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js'></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
@@ -186,8 +210,6 @@
       //cropped.src = imgSrc;
     }
   });
-
-
 
 
 

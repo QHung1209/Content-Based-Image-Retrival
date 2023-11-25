@@ -78,7 +78,6 @@ def get_Data():
 
     url = [paths[id] for id in ids]
 
-
     return render_template("index.html", image_urls=url)
 
 @app.route("/")
