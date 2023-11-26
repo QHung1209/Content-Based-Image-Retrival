@@ -7,84 +7,10 @@
   <title> Image Search </title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.min.css'>
-  <style>
-
-    .form-section {
-      height: 100vh;
-      display: flex;
-    }
-
-    .page {
-      margin: 1em auto;
-      width: 35%;
-      display: flex;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      height: 100%;
-      float: left;
-      text-align: left;
-    }
-
-    .box {
-      padding: 0.5em;
-      width: calc(100%/2 - 1em);
-      margin: 0.5em;
-
-    }
-
-    .box-2 {
-      padding: 0.5em;
-      width: calc(100%/2 - 1em);
-
-    }
-
-    .options label,
-    .options input {
-      width: 4em;
-      padding: 0.5em 1em;
-    }
-
-    .btn {
-      background: white;
-      color: black;
-      border: 1px solid black;
-      padding: 0.5em 1em;
-      text-decoration: none;
-      margin: 0.8em 0.3em;
-      display: inline-block;
-      cursor: pointer;
-    }
-
-    .hide {
-      display: none;
-    }
-
-    img {
-      max-width: 100%;
-    }
-
-    .display {
-      display: block;
-      width: 70%;
-      flex-wrap: wrap;
-      justify-content: space-around;
-    }
-
-    .display img {
-      width: 300px;
-      height: auto;
-      margin: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      transition: 0.3s;
-      cursor: pointer;
-    }
-
-    .display img:hover {
-      border: 1px solid #777;
-    }
-  </style>
-
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js'></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
 </head>
 
 <body>
@@ -100,11 +26,11 @@
           <td>
             <!-- input file -->
             <form id="uploadForm" action="/upload_file" method="POST" enctype="multipart/form-data">
-  
+
               <input type="file" name="file" accept="image/*" id="file-input" style="margin-left: 50px;" />
               <input type="hidden" name="image_url" id="image_url" value="" />
               <button type="button" class="btn upload hide" id="searchBtn" style="margin-left: 50px;">Search</button>
-  
+
             </form>
           </td>
         </tr>
@@ -123,23 +49,28 @@
           </td>
       </table>
     </div>
-      <div class="display image">
-        {% if image_urls %}
-        <h1>Result</h1>
-        {% for image in image_urls %}
-        <img src="{{ url_for('static', filename=image) }}" alt="{{ image }}">
-        {% endfor %}
-        {% endif %}
-      </div>
+    <div class="display image">
+      {% if image_urls %}
+      <h1>Result</h1>
+      {% for image in image_urls %}
+      <img src="{{ url_for('static', filename=image) }}" alt="{{ image }}" style="width: 300px; height: 300px;"
+        onclick="openModal(this.src)">
+      {% endfor %}
+      {% endif %}
+    </div>
 
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img class="modal-content" id="modalImg">
+    </div>
   </div>
- 
- 
+
+
 
 
 </body>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js'></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 <script>
 
   let result = document.querySelector('.result'),
@@ -248,6 +179,18 @@
 
   });
 
+  function openModal(imgSrc) {
+    var modal = document.getElementById('myModal');
+    var modalImg = document.getElementById('modalImg');
+
+    modal.style.display = 'block';
+    modalImg.src = imgSrc;
+  }
+
+  function closeModal() {
+    var modal = document.getElementById('myModal');
+    modal.style.display = 'none';
+  }
 </script>
 
 </html>

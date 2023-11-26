@@ -1,0 +1,105 @@
+.form-section {
+    height: 100vh;
+    display: flex;
+}
+
+.page {
+    margin: 1em auto;
+    width: 35%;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    height: 100%;
+    float: left;
+    text-align: left;
+}
+
+.box {
+    padding: 1em;
+    width: 100%;
+    margin: 1em;
+
+}
+
+.box-2 {
+    padding: 1em;
+    width: 80%;
+
+}
+
+.options label,
+.options input {
+    width: 4em;
+    padding: 0.5em 1em;
+}
+
+.btn {
+    background: white;
+    color: black;
+    border: 1px solid black;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    margin: 0.8em 0.3em;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.hide {
+    display: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+.display {
+    display: block;
+    width: 70%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.display img {
+    width: 300px;
+    height: auto;
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.display img:hover {
+    border: 1px solid #777;
+}
+
+/* CSS for the modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 80%;
+    max-height: 80%;
+}
+
+/* Close button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
